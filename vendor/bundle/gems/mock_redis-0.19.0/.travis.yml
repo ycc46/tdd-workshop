@@ -1,0 +1,33 @@
+language: ruby
+
+sudo: false
+
+cache: bundler
+
+addons:
+  apt:
+    packages:
+      - redis-server
+
+services:
+  - redis-server
+
+rvm:
+  - 2.2
+  - 2.3.7
+  - 2.4.4
+  - 2.5.1
+
+before_script:
+  - git config --local user.email "travis@travis.ci"
+  - git config --local user.name "Travis CI"
+
+script:
+  - redis-cli --version
+  - bundle exec rspec
+  - bundle exec overcommit --sign
+  - bundle exec overcommit --run
+
+matrix:
+  allow_failures:
+    - rvm: 2.1.0
