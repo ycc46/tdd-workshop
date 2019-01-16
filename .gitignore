@@ -17,3 +17,4 @@ vendor
 /yarn-error.log
 
 .byebug_history
+.ruby-version
