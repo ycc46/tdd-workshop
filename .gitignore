@@ -18,3 +18,4 @@ vendor
 
 .byebug_history
 .ruby-version
+.DS_Store
