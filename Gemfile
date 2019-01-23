@@ -30,7 +30,8 @@ gem 'turbolinks', '~> 5'
 # gem 'capistrano-rails', group: :development
 
 # Reduces boot times through caching; required in config/boot.rb
-# gem 'bootsnap', '>= 1.1.0', require: false
+gem 'bootsnap', '>= 1.1.0', require: false
+gem 'devise'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -49,12 +50,12 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'rubocop',require: false
+  gem 'rubocop', require: false
 end
 
 group :test do
   gem 'database_cleaner'
-  gem 'shoulda-matchers','4.0.0.rc1'
+  gem 'shoulda-matchers', '4.0.0.rc1'
   gem 'rails-controller-testing'
   gem 'rspec-sidekiq'
   gem 'mock_redis'

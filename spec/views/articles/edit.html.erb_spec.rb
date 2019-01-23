@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "articles/edit", type: :view do
   before(:each) do
     @article = assign(:article, Article.create!(
-      :title => "MyString"
+                                  title: "MyString"
     ))
   end
 
