@@ -88,11 +88,11 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
   end
 
-  describe 'Delete #destory' do
-    context 'when destory successfully' do
+  describe 'Delete #destroy' do
+    context 'when destroy successfully' do
       before :each do
         @user = create :user
-        delete :destory,params: { id: @user.id }
+        delete :destroy,params: { id: @user.id }
       end
 
       it { should respond_with 204 }
@@ -103,10 +103,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
     end
 
-    context 'when destory failed' do
+    context 'when destroy failed' do
       before :each do
         @user = create :user
-        delete :destory,params: { id: nil }
+        delete :destroy,params: { id: '0' }
       end
 
       it { should respond_with 404 }

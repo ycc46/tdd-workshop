@@ -23,13 +23,14 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  def destory
+  def destroy
     user =User.find_by(id: params[:id])
-    if user.blank
+    if user.blank?
       render json:{ errors: 'Not found' }, status: 404
-    else
-      user.destory
+    elsif user.destroy
       render json:{result: 'success'}, status: 204
+    else
+      render json:{ errors: user.errors}, status: 422
     end
   end
 
