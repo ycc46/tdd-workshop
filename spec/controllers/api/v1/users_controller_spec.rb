@@ -7,7 +7,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       get :show, params: { id:@user.id }
     end
 
-    it {should respond_with 200 }
+    it { should respond_with 200 }
 
     it "returns a user response" do
       json_response = JSON.parse response.body, symbolize_names: true
@@ -22,7 +22,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         post :create,params: {user: @user_attributes}
       end
 
-      it {should respond_with 201 }
+      it { should respond_with 201 }
 
       it "returns the user record just create" do
         json_response = JSON.parse response.body, symbolize_names: true
@@ -36,7 +36,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         post :create,params: { user:@invalid_user_attributes}
       end
 
-      it {should respond_with 422 }
+      it { should respond_with 422 }
 
       it 'render errors json' do
         json_response = JSON.parse response.body, symbolize_names: true
@@ -48,9 +48,81 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(json_response[:errors][:email]).to include("can't be blank")
       end
     end
-
-
   end
 
+  describe 'Put #update' do
+    context 'when update successfully' do
+      before :each do
+        @user = create :user
+        @user_attributes_email = { email: '123@qq.com' }
+        put :update,params: { id: @user.id,user: @user_attributes_email }
+      end
+
+      it { should respond_with 200 }
+
+      it 'returns the user record just update' do
+        json_response = JSON.parse response.body, symbolize_names: true
+        expect(json_response[:email]).to eq @user_attributes_email[:email]
+      end
+
+    end
+
+    context 'when update failed' do
+      before :each do
+        @user = create :user
+        @invalid_user_attributes = { email: nil }
+        put :update,params: { id: @user.id,user: @invalid_user_attributes }
+      end
+
+      it { should respond_with 422 }
+
+      it 'render errors json' do
+        json_response = JSON.parse response.body, symbolize_names: true
+        expect(json_response).to have_key(:errors)
+      end
+
+      it 'render errors json whith detail message' do
+        json_response = JSON.parse response.body, symbolize_names: true
+        expect(json_response[:errors][:email]).to include("can't be blank")
+      end
+    end
+  end
+
+  describe 'Delete #destory' do
+    context 'when destory successfully' do
+      before :each do
+        @user = create :user
+        delete :destory,params: { id: @user.id }
+      end
+
+      it { should respond_with 204 }
+
+      it 'returns the result just destroy' do
+        json_response = JSON.parse response.body, symbolize_names: true
+        expect(json_response[:result]).to eq 'success'
+      end
+    end
+
+    context 'when destory failed' do
+      before :each do
+        @user = create :user
+        delete :destory,params: { id: nil }
+      end
+
+      it { should respond_with 404 }
+
+      it 'render errors json' do
+        json_response = JSON.parse response.body, symbolize_names: true
+        expect(json_response).to have_key(:errors)
+      end
+
+      it 'render errors json whith detail message' do
+        json_response = JSON.parse response.body, symbolize_names: true
+        expect(json_response[:errors]).to include("Not found")
+      end
+
+    end
+
+  end
 
 end

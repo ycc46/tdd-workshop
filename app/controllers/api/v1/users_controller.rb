@@ -9,7 +9,27 @@ class Api::V1::UsersController < ApplicationController
     if user.save
       render json: user, status: 201
     else
-      render json:{ errors: user.errors}, status:422
+      render json:{ errors: user.errors}, status: 422
+    end
+  end
+
+  def update
+    user =User.find_by(id: params[:id])
+    user.update(user_params)
+    if user.save
+      render json:user,status:200
+    else
+      render json:{ errors: user.errors}, status: 422
+    end
+  end
+
+  def destory
+    user =User.find_by(id: params[:id])
+    if user.blank
+      render json:{ errors: 'Not found' }, status: 404
+    else
+      user.destory
+      render json:{result: 'success'}, status: 204
     end
   end
 
