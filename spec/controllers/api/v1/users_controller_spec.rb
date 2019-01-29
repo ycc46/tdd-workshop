@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V1::UsersController, type: :controller do
   describe 'Get #show' do
     before :each do
-      @user =create :user
+      @user = create :user
       get :show, params: { id:@user.id }
     end
 
@@ -19,7 +19,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when create successfully' do
       before :each do
         @user_attributes = attributes_for :user
-        post :create,params: {user: @user_attributes}
+        post :create, params: { user: @user_attributes }
       end
 
       it { should respond_with 201 }
@@ -32,8 +32,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when created failed' do
       before :each do
-        @invalid_user_attributes = { password: '123456',password_confirmation: '123456' }
-        post :create,params: { user:@invalid_user_attributes}
+        @invalid_user_attributes = { password: '123456', password_confirmation: '123456' }
+        post :create, params: { user: @invalid_user_attributes }
       end
 
       it { should respond_with 422 }
@@ -55,7 +55,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       before :each do
         @user = create :user
         @user_attributes_email = { email: '123@qq.com' }
-        put :update,params: { id: @user.id,user: @user_attributes_email }
+        put :update, params: { id: @user.id, user: @user_attributes_email }
       end
 
       it { should respond_with 200 }
@@ -71,7 +71,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       before :each do
         @user = create :user
         @invalid_user_attributes = { email: nil }
-        put :update,params: { id: @user.id,user: @invalid_user_attributes }
+        put :update, params: { id: @user.id, user: @invalid_user_attributes }
       end
 
       it { should respond_with 422 }
@@ -92,7 +92,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when destroy successfully' do
       before :each do
         @user = create :user
-        delete :destroy,params: { id: @user.id }
+        delete :destroy, params: { id: @user.id }
       end
 
       it { should respond_with 204 }
@@ -106,7 +106,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when destroy failed' do
       before :each do
         @user = create :user
-        delete :destroy,params: { id: '0' }
+        delete :destroy, params: { id: '0' }
       end
 
       it { should respond_with 404 }
@@ -118,7 +118,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       it 'render errors json whith detail message' do
         json_response = JSON.parse response.body, symbolize_names: true
-        expect(json_response[:errors]).to include("Not found")
+        expect(json_response[:errors]).to include('Not found')
       end
 
     end
