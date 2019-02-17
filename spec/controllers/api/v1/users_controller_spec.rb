@@ -54,6 +54,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when update successfully' do
       before :each do
         @user = create :user
+        api_authorization_header @user.auth_token
         @user_attributes_email = { email: '123@qq.com' }
         put :update, params: { id: @user.id, user: @user_attributes_email }
       end
@@ -70,6 +71,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when update failed' do
       before :each do
         @user = create :user
+        api_authorization_header @user.auth_token
         @invalid_user_attributes = { email: nil }
         put :update, params: { id: @user.id, user: @invalid_user_attributes }
       end
@@ -92,37 +94,12 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when destroy successfully' do
       before :each do
         @user = create :user
+        api_authorization_header @user.auth_token
         delete :destroy, params: { id: @user.id }
       end
 
       it { should respond_with 204 }
-
-      it 'returns the result just destroy' do
-        json_response = JSON.parse response.body, symbolize_names: true
-        expect(json_response[:result]).to eq 'success'
-      end
     end
-
-    context 'when destroy failed' do
-      before :each do
-        @user = create :user
-        delete :destroy, params: { id: '0' }
-      end
-
-      it { should respond_with 404 }
-
-      it 'render errors json' do
-        json_response = JSON.parse response.body, symbolize_names: true
-        expect(json_response).to have_key(:errors)
-      end
-
-      it 'render errors json whith detail message' do
-        json_response = JSON.parse response.body, symbolize_names: true
-        expect(json_response[:errors]).to include('Not found')
-      end
-
-    end
-
   end
 
 end

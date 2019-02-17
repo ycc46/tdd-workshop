@@ -14,28 +14,17 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def update
-    user = User.find params[:id]
-    if user.blank?
-      render json: { errors: 'Not found' }, status: 404
+    user = current_user
+    if user.update user_params
+      render json: user, status: 200
     else
-      user.update user_params
-      if user.save
-        render json: user, status:200
-      else
-        render json: { errors: user.errors}, status: 422
-      end
+      render json: { errors: user.errors }, status: 422
     end
   end
 
   def destroy
-    user = User.find_by id: params[:id]
-    if user.blank?
-      render json: { errors: 'Not found' }, status: 404
-    elsif user.destroy
-      render json: { result: 'success' }, status: 204
-    else
-      render json: { errors: user.errors }, status: 422
-    end
+    current_user.destroy
+    head 204
   end
 
   private
