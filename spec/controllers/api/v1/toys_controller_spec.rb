@@ -38,4 +38,57 @@ RSpec.describe Api::V1::ToysController, type: :controller do
     end
   end
 
+  describe 'Put #update' do
+    context 'when update successfully' do
+      before :each do
+        @user = create :user
+        @toy = create :toy
+        api_authorization_header @user.auth_token
+        @toy_attributes = { title: 'toy1', user_id: @user.id}
+        put :update, params: { id: @toy.id, toy: @toy_attributes }
+      end
+
+      it { should respond_with 200 }
+
+      it 'returns the toy record just update' do
+        expect(json_response[:data][:attributes][:title]).to eq @toy_attributes[:title]
+        expect(json_response[:data][:attributes][:user_id]).to eq @user[:id]
+      end
+    end
+
+    context 'when update failed' do
+      before :each do
+        @user = create :user
+        @toy = create :toy
+        api_authorization_header @user.auth_token
+        @toy_attributes = { title: nil, user_id: @user.id }
+        put :update, params: { id: @toy.id, toy: @toy_attributes }
+      end
+
+      it { should respond_with 422 }
+
+      it 'render errors json' do
+        expect(json_response).to have_key(:errors)
+      end
+
+      it 'render errors json whith detail message' do
+        expect(json_response[:errors].first[:detail]).to include("can't be blank")
+      end
+    end
+  end
+
+  describe 'Delete #destroy' do
+    context 'when destroy successfully' do
+      before :each do
+        @toy = create :toy
+        @user = create :user
+        api_authorization_header @user.auth_token
+        @toy_attributes = { user_id: @user.id }
+        delete :destroy, params: { id: @toy.id, toy: @toy_attributes }
+      end
+
+      it { should respond_with 204 }
+    end
+  end
+
 end
