@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ToysController, type: :controller do
+
   describe 'Get #show' do
     before :each do
       @toy = create :toy
@@ -14,7 +15,11 @@ RSpec.describe Api::V1::ToysController, type: :controller do
       expect(json_response[:data][:attributes][:price]) == @toy.price
       expect(json_response[:data][:attributes][:user_id]).to eq @toy.user_id
       expect(json_response[:data][:attributes][:published]).to eq @toy.published
+    end
 
+    it "returns user relationships in toy" do
+      #binding.pry
+      expect(json_response[:data][:relationships][:user][:data][:id].to_i).to eq @toy.user.id
     end
   end
 

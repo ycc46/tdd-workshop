@@ -1,5 +1,11 @@
 class Api::V1::ToysController < ApplicationController
-  before_action :authenticate_with_token!, only: [:creat, :destroy]
+  before_action :authenticate_with_token!, only: [:creat, :update]
+
+  def index
+    @toy = Toy.all
+    render json: ToySerializer.new(@toy), status: 200
+  end
+
   def show
     @toy = Toy.find params[:id]
     render json: ToysSerializer.new(@toy)
@@ -15,8 +21,8 @@ class Api::V1::ToysController < ApplicationController
   end
 
   def update
-    toy=Toy.find params[:id]
-    #binding.pry
+    toy = Toy.find params[:id]
+    # binding.pry
     if toy.update toy_params
       render json: ToysSerializer.new(toy), status: 200
     else
@@ -26,17 +32,14 @@ class Api::V1::ToysController < ApplicationController
 
   def destroy
     current_user.toys.destroy
-    #binding.pry
+    # binding.pry
     head 204
   end
 
 
   private
 
-  def toy_params
-    params.require(:toy).permit(:user_id, :title, :price, :published)
-  end
-
-
-
+    def toy_params
+      params.require(:toy).permit(:user_id, :title, :price, :published)
+    end
 end
