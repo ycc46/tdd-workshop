@@ -2,8 +2,8 @@ class Api::V1::ToysController < ApplicationController
   before_action :authenticate_with_token!, only: [:creat, :update]
 
   def index
-    @toy = Toy.all
-    render json: ToySerializer.new(@toy), status: 200
+    @toys = Toy.all
+    render json: ToysSerializer.new(@toys), status: 200
   end
 
   def show
@@ -21,9 +21,9 @@ class Api::V1::ToysController < ApplicationController
   end
 
   def update
-    toy = Toy.find params[:id]
-    # binding.pry
-    if toy.update toy_params
+    toy = current_user.toys.find params[:id]
+    #binding.pry
+    if toy.update_attributes toy_params
       render json: ToysSerializer.new(toy), status: 200
     else
       render json: { errors: ErrorSerializer.new(toy).serialized_json }, status: 422

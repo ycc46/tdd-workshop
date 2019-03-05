@@ -1,6 +1,23 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ToysController, type: :controller do
+  describe 'Get #idenx' do
+    before :each do
+      @toy_1 = create :toy
+      @toy_2 = create :toy
+      @toy_3 = create :toy
+      get :index
+    end
+
+    it { should respond_with 200 }
+
+    it 'returns a toy response' do
+      expect(json_response[:data].count).to eq 3
+      expect(json_response[:data][0][:id].to_i).to eq @toy_1.id
+      expect(json_response[:data][1][:id].to_i).to eq @toy_2.id
+      expect(json_response[:data][2][:id].to_i).to eq @toy_3.id
+    end
+  end
 
   describe 'Get #show' do
     before :each do
@@ -29,7 +46,7 @@ RSpec.describe Api::V1::ToysController, type: :controller do
         @toy_attributes = attributes_for :toy
         @user = create :user
         api_authorization_header @user.auth_token
-        post :create, params: { toy: @toy_attributes }
+        post :create, params: { toy: @toy_attributes, user_id: @user.id }
       end
 
       it { should respond_with 201 }
@@ -46,33 +63,34 @@ RSpec.describe Api::V1::ToysController, type: :controller do
   describe 'Put #update' do
     context 'when update successfully' do
       before :each do
-        @user = create :user
         @toy = create :toy
+        @user = User.find(@toy.user_id)
         api_authorization_header @user.auth_token
-        @toy_attributes = { title: 'toy1', user_id: @user.id}
-        put :update, params: { id: @toy.id, toy: @toy_attributes }
+        @toy_attributes = { title: 'toy1'}
+        put :update, params: { id: @toy.id, toy: @toy_attributes, user_id: @user.id }
       end
 
       it { should respond_with 200 }
 
       it 'returns the toy record just update' do
         expect(json_response[:data][:attributes][:title]).to eq @toy_attributes[:title]
-        expect(json_response[:data][:attributes][:user_id]).to eq @user[:id]
+        expect(json_response[:data][:attributes][:user_id]).to eq @user.id
       end
     end
 
     context 'when update failed' do
       before :each do
-        @user = create :user
         @toy = create :toy
+        @user = User.find(@toy.user_id)
         api_authorization_header @user.auth_token
-        @toy_attributes = { title: nil, user_id: @user.id }
-        put :update, params: { id: @toy.id, toy: @toy_attributes }
+        @toy_attributes = { title: nil}
+        put :update, params: { id: @toy.id, toy: @toy_attributes, user_id: @user.id }
       end
 
       it { should respond_with 422 }
 
       it 'render errors json' do
+        #binding.pry
         expect(json_response).to have_key(:errors)
       end
 
