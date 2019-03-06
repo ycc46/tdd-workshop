@@ -3,6 +3,8 @@ class Toy < ApplicationRecord
   validates :price, numericality: { greater_than_or_equal_to: 0 }, presence: true
 
   belongs_to :user
+  has_many :placements
+  has_many :orders, through: :placements
   scope :filter_by_title, ->(keyword) { where('title like ?', "%#{keyword}%") }
   scope :above_or_equal_to_price, ->(keyword) { where('price >= ?', keyword) }
   scope :below_or_equal_to_price, ->(keyword) { where('price <= ?', keyword) }
