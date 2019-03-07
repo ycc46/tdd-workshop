@@ -12,17 +12,33 @@ class Api::V1::OrdersController < ApplicationController
   end
 
   def create
-    order = current_user.orders.new order_params
-    if order.save
-      render json: OrdersSerializer.new(order), status: 201
+    toys = Toy.where(id: params[:toy_ids])
+    @order = current_user.orders.new(total: toys.pluck(:price).sum)
+    if toys.present? && @order.save
+      toys.each do |toy|
+        @order.placements.create(toy_id: toy.id)
+      end
+      render json: OrdersSerializer.new(@order), status: 201
     else
-      render json: { errors: ErrorSerializer.new(order).serialized_json }, status: 422
+      render json: { errors: ErrorSerializer.new(@order).serialized_json }, status: 422
     end
   end
 
-  private
 
-    def order_params
-      params.require(:order).permit(:user_id, :toys[])
-    end
+  # def create
+  #   order = current_user.orders.build order_params
+  #
+  #   if order.save
+  #     render json: OrderSerializer.new(order), status: 201
+  #   else
+  #     render json: { errors: ErrorSerializer.new(order).serialized_json }, status: 422
+  #   end
+  # end
+  #
+  # private
+  #
+  # def order_params
+  #   params.require(:order).permit(toy_ids: [])
+  # end
+
 end
