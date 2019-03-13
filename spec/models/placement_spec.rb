@@ -9,12 +9,8 @@ RSpec.describe Placement, type: :model do
 
   it { should respond_to :order_id }
   it { should respond_to :toy_id }
-  it { should be_valid }
 
-  it { should validate_presence_of :order_id }
-  it { should validate_presence_of :toy_id }
-
-  it { should belong_to :toy }
   it { should belong_to :order }
+  it { should belong_to :toy }
 
 end

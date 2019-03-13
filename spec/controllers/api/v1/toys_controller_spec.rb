@@ -22,7 +22,7 @@ RSpec.describe Api::V1::ToysController, type: :controller do
   describe 'Get #show' do
     before :each do
       @toy = create :toy
-      get :show, params: { id:@toy.id }
+      get :show, params: { id: @toy.id }
     end
 
     it { should respond_with 200 }
@@ -35,7 +35,7 @@ RSpec.describe Api::V1::ToysController, type: :controller do
     end
 
     it "returns user relationships in toy" do
-      #binding.pry
+      # binding.pry
       expect(json_response[:data][:relationships][:user][:data][:id].to_i).to eq @toy.user.id
     end
   end
@@ -66,7 +66,7 @@ RSpec.describe Api::V1::ToysController, type: :controller do
         @toy = create :toy
         @user = User.find(@toy.user_id)
         api_authorization_header @user.auth_token
-        @toy_attributes = { title: 'toy1'}
+        @toy_attributes = { title: 'toy1' }
         put :update, params: { id: @toy.id, toy: @toy_attributes, user_id: @user.id }
       end
 
@@ -83,14 +83,14 @@ RSpec.describe Api::V1::ToysController, type: :controller do
         @toy = create :toy
         @user = User.find(@toy.user_id)
         api_authorization_header @user.auth_token
-        @toy_attributes = { title: nil}
+        @toy_attributes = { title: nil }
         put :update, params: { id: @toy.id, toy: @toy_attributes, user_id: @user.id }
       end
 
       it { should respond_with 422 }
 
       it 'render errors json' do
-        #binding.pry
+        # binding.pry
         expect(json_response).to have_key(:errors)
       end
 

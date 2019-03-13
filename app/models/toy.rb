@@ -5,7 +5,7 @@ class Toy < ApplicationRecord
   belongs_to :user
   has_many :placements
   has_many :orders, through: :placements
-  
+
   scope :filter_by_title, ->(keyword) { where('title like ?', "%#{keyword}%") }
   scope :above_or_equal_to_price, ->(keyword) { where('price >= ?', keyword) }
   scope :below_or_equal_to_price, ->(keyword) { where('price <= ?', keyword) }
@@ -19,5 +19,4 @@ class Toy < ApplicationRecord
     toys = toys.recent_by_order_desc if params[:desc_order].present?
     toys
   end
-
 end

@@ -22,7 +22,7 @@ class Api::V1::ToysController < ApplicationController
 
   def update
     toy = current_user.toys.find params[:id]
-    #binding.pry
+    # binding.pry
     if toy.update_attributes toy_params
       render json: ToysSerializer.new(toy), status: 200
     else

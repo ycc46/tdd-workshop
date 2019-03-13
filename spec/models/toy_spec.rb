@@ -29,7 +29,7 @@ RSpec.describe Toy, type: :model do
     end
 
     it 'search toys with keyword' do
-      expect(Toy.filter_by_title('Ruby')).to match_array([@toy1,@toy2,@toy3,@toy4])
+      expect(Toy.filter_by_title('Ruby')).to match_array([@toy1, @toy2, @toy3, @toy4])
     end
   end
 
@@ -42,12 +42,12 @@ RSpec.describe Toy, type: :model do
     end
 
     it 'search toys above or equal to price' do
-      expect(Toy.above_or_equal_to_price(100)).to match_array([@toy1,@toy2,@toy4])
+      expect(Toy.above_or_equal_to_price(100)).to match_array([@toy1, @toy2, @toy4])
     end
 
     it 'search toys below or equal to price' do
-      #binding.pry
-      expect(Toy.below_or_equal_to_price(100)).to match_array([@toy3,@toy1])
+      # binding.pry
+      expect(Toy.below_or_equal_to_price(100)).to match_array([@toy3, @toy1])
     end
   end
 
@@ -60,7 +60,7 @@ RSpec.describe Toy, type: :model do
     end
 
     it 'returns correct ordered toys' do
-      expect(Toy.recent_by_order_desc).to eq [@toy4,@toy3,@toy2,@toy1]
+      expect(Toy.recent_by_order_desc).to eq [@toy4, @toy3, @toy2, @toy1]
     end
   end
 
@@ -75,7 +75,7 @@ RSpec.describe Toy, type: :model do
 
     it 'just have keyword and min_price and order' do
       params = { keyword: 'Ruby', min_price: 100, desc_order: true }
-      expect(Toy.search(params)).to eq [@toy2,@toy1]
+      expect(Toy.search(params)).to eq [@toy2, @toy1]
     end
 
     it 'just have keyword and max_price' do
@@ -84,13 +84,13 @@ RSpec.describe Toy, type: :model do
     end
 
     it 'just have min_price and max_price' do
-      params = { min_price: 100, max_price: 100}
+      params = { min_price: 100, max_price: 100 }
       expect(Toy.search(params)).to match_array([@toy1])
     end
 
     it 'params is empty' do
       params = {}
-      expect(Toy.search(params)).to match_array([@toy1,@toy2,@toy3,@toy4])
+      expect(Toy.search(params)).to match_array([@toy1, @toy2, @toy3, @toy4])
     end
 
   end
