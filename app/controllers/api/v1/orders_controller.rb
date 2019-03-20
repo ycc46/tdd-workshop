@@ -35,6 +35,4 @@ class Api::V1::OrdersController < ApplicationController
       render json: { errors: ErrorSerializer.new(order).serialized_json }, status: 422
     end
   end
-
-
 end

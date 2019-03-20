@@ -13,4 +13,13 @@ RSpec.describe Placement, type: :model do
   it { should belong_to :order }
   it { should belong_to :toy }
 
+  describe '#update_inventory' do
+    before :each do
+      @toy = build :toy, quantity: 10
+      @placement = build :placement, toy: @toy, quantity: 3
+    end
+    it 'returns the update inventory' do
+      expect { @placement.update_inventory }.to change { @toy.quantity }.from(10).to(7)
+    end
+  end
 end

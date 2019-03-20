@@ -11,13 +11,13 @@ class Order < ApplicationRecord
 
   def set_total!
     placements.each do |placement|
-      self.total +=placement.toy.price * placement.quantity
+      self.total += placement.toy.price * placement.quantity
     end
   end
 
   def build_placements(params = [])
     params.each do |(toy_id, qty)|
-        self.placements.build toy_id: toy_id, quantity: qty
+      self.placements.build toy_id: toy_id, quantity: qty
     end
   end
 end

@@ -84,8 +84,8 @@ RSpec.describe Api::V1::OrdersController, type: :controller do
 
         @toy1 = create :toy
         @toy2 = create :toy
-        order_params =[[@toy1.id,2], [@toy2.id, 3] ]
-        post :create, params: { user_id: current_user.id, order: { toy_ids_and_quantites: order_params }}
+        order_params = [[@toy1.id, 2], [@toy2.id, 3] ]
+        post :create, params: { user_id: current_user.id, order: { toy_ids_and_quantites: order_params } }
       end
 
       it { should respond_with 201 }
